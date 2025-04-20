@@ -25,7 +25,7 @@ function design(asks, bids){
 
   for(let [price, size] of asks){
     price = parseInt(price);
-    size = Number(size);
+    size = parseFloat(size);
 
     if (remapAsks[price]){
       remapAsks[price] += size;
@@ -36,7 +36,7 @@ function design(asks, bids){
 
   for(let [price,size] of bids){
     price = parseInt(price);
-    size = Number(size);
+    size = parseFloat(size);
 
     if (remapBids[price]) {
       remapBids[price] += size;
