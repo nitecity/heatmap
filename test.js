@@ -31,7 +31,7 @@ function startAggTrades() {
                 } else if (sum > 300000 && sum <= 600000) {
                     updateElements(header, text, 'rgb(101, 2, 2)');
                 } else if (sum > 600000 && sum <= 1000000) {
-                    updateElements(header, text, 'rgb(169, 6, 6)');
+                    updateElements(header, text, 'rgb(151, 6, 6)');
                 } else if (sum > 1000000) {
                     updateElements(header, text, 'rgb(255, 7, 7)');
                 }
@@ -159,10 +159,16 @@ aggStartButton.addEventListener('click', (e) => {
 });
 
 
-function updateElements(header, text, color){
+function updateElements(header, text, bg){
     const newData = document.createElement('div');
+    newData.style.backgroundColor = bg;
+    newData.style.borderRadius = '5px';
+    newData.style.padding = '10px';
+    newData.style.margin = '5px';
+    newData.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    newData.style.fontSize = '14px';
     newData.innerHTML = header + '<br/>' + text;
-    newData.style.color = color;
+    //newData.style.color = 'white';
     newData.style.fontWeight = 'bold';
     container.prepend(newData);
     while(container.children.length > 10) {
