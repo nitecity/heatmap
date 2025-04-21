@@ -27,23 +27,13 @@ function startAggTrades() {
                 const header = 'Aggressive Sell';
                 
                 if ( sum >= 100000 && sum <= 300000) {
-                    const newData = document.createElement('div');
-                    newData.innerHTML = header + '<br/>' + text;
-                    newData.style.color = 'green';
-                    newData.style.fontWeight = 'bold';
-                    container.prepend(newData);
-                    while(container.children.length > 10) {
-                        container.removeChild(container.lastChild);
-                    }
+                    updateElements(header, text, 'rgb(53, 1, 1)');
                 } else if (sum > 300000 && sum <= 600000) {
-                    console.log(header);
-                    console.log(chalk.rgb(128, 2, 2).bold(text));
+                    updateElements(header, text, 'rgb(101, 2, 2)');
                 } else if (sum > 600000 && sum <= 1000000) {
-                    console.log(header);
-                    console.log(chalk.rgb(176, 5, 5).bold(text));
+                    updateElements(header, text, 'rgb(169, 6, 6)');
                 } else if (sum > 1000000) {
-                    console.log(header);
-                    console.log(chalk.rgb(255, 0, 0).bold(text));
+                    updateElements(header, text, 'rgb(255, 7, 7)');
                 }
                 
                 
@@ -173,3 +163,15 @@ aggStartButton.addEventListener('click', (e) => {
     //     stopHeatmap();
     // }
 });
+
+
+function updateElements(header, text, color){
+    const newData = document.createElement('div');
+    newData.innerHTML = header + '<br/>' + text;
+    newData.style.color = color;
+    newData.style.fontWeight = 'bold';
+    container.prepend(newData);
+    while(container.children.length > 10) {
+        container.removeChild(container.lastChild);
+    }
+}
