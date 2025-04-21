@@ -1,18 +1,99 @@
-.container {
-    display: flex; /* Enable flexbox for the container */
-    align-items: center; /* Align items vertically if needed */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
 }
-.box {
-    width: 200px;
-    height: 100px;
-    background-color: #4CAF50;
+
+.table {
     text-align: center;
-    line-height: 100px; /* Vertically center the text */
-    color: white;
-    font-size: 18px;
-    margin-right: 10px; /* Add spacing between the div and span */
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
 }
-.span-text {
+
+.table th {
+    background-color: #555;
+    color: rgb(214, 214, 214);
     font-size: 18px;
-    color: #333;
+}
+
+body {
+    background-color: #1a1a1a;
+    color: #b8b8b8;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    
+    justify-content: center;
+    align-items: center;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#sym {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #d4c1a6;
+    margin-right: 20px;
+}
+
+.button {
+    cursor: pointer;
+    border: none;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
+    transition: background-color 0.3s;
+}
+
+#start {
+    background-color: #4CAF50;
+}
+
+#stop {
+    background-color: #b50a6b;
+}
+
+.box {
+    cursor: pointer;
+    display: inline-block;
+    color:#000000;
+    background-color: #f9d33a;
+    width: 95px;
+    height: 50px;
+    border: 2px solid rgb(177, 177, 177);
+    border-radius: 8px;
+    text-align: center; 
+    vertical-align: middle;
+    line-height: 50px;
+    font-size: 15px;
+    margin-right: 3px;
+    margin-bottom: 7px;
+    margin-top: 5px;
+}
+
+#failed {
+    color: #c50a46;
+    padding-bottom: 8px;
+}
+
+#alarmEmoji {
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
 }
