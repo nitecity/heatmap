@@ -31,6 +31,7 @@ function startAggTrades() {
                     newData.innerHTML = header + '<br/>' + text;
                     newData.style.color = 'green';
                     newData.style.fontWeight = 'bold';
+                    container.prepend(newData);
                 } else if (sum > 300000 && sum <= 600000) {
                     console.log(header);
                     console.log(chalk.rgb(128, 2, 2).bold(text));
@@ -44,7 +45,7 @@ function startAggTrades() {
                 
                 
 
-                container.prepend(newData);
+                
 
                 while(container.children.length > 10) {
                     container.removeChild(container.lastChild);
