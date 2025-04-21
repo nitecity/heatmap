@@ -25,21 +25,24 @@ function startAggTrades() {
 
             if (data.m){
                 const header = 'Aggressive Sell';
-                // if ( sum >= 100000 && sum <= 300000) {
-                //     console.log(header);
-                //     console.log(chalk.rgb(78, 0, 0).bold(text));
-                // } else if (sum > 300000 && sum <= 600000) {
-                //     console.log(header);
-                //     console.log(chalk.rgb(128, 2, 2).bold(text));
-                // } else if (sum > 600000 && sum <= 1000000) {
-                //     console.log(header);
-                //     console.log(chalk.rgb(176, 5, 5).bold(text));
-                // } else if (sum > 1000000) {
-                //     console.log(header);
-                //     console.log(chalk.rgb(255, 0, 0).bold(text));
-                // }
-                const newData = document.createElement('div');
-                newData.textContent = text;
+                
+                if ( sum >= 100000 && sum <= 300000) {
+                    const newData = document.createElement('div');
+                    newData.innerHTML = header + '<br/>' + text;
+                    newData.style.color = 'green';
+                    newData.style.fontWeight = 'bold';
+                } else if (sum > 300000 && sum <= 600000) {
+                    console.log(header);
+                    console.log(chalk.rgb(128, 2, 2).bold(text));
+                } else if (sum > 600000 && sum <= 1000000) {
+                    console.log(header);
+                    console.log(chalk.rgb(176, 5, 5).bold(text));
+                } else if (sum > 1000000) {
+                    console.log(header);
+                    console.log(chalk.rgb(255, 0, 0).bold(text));
+                }
+                
+                
 
                 container.prepend(newData);
 
