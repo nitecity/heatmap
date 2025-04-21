@@ -16,7 +16,7 @@ function startAggTrades() {
         currentWebSocket.close();
     }
 
-    const socket = new WebSocket('wss://fstream.binance.com/ws/btcusdt@aggTrade/btcusdt');
+    const socket = new WebSocket('wss://fstream.binance.com/ws/btcusdt@aggTrade');
     currentWebSocket = socket; // Store the new socket
 
     socket.onopen = () => {
