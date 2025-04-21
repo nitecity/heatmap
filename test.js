@@ -37,22 +37,20 @@ function startAggTrades() {
                 }
 
                 
-            }//else{
-            //     const header = chalk.bgGreen.bold('Aggressive Buy');
-            //     if ( sum >= 100000 && sum <= 300000) {
-            //         console.log(chalk.rgb(1, 53, 1).bold(text));
-            //         console.log(header);
-            //     } else if (sum > 300000 && sum <= 600000) {
-            //         console.log(header);
-            //         console.log(chalk.rgb(2, 101, 2).bold(text));
-            //     } else if (sum > 600000 && sum <= 1000000) {
-            //         console.log(header);
-            //         console.log(chalk.rgb(6, 169, 6).bold(text));
-            //     } else if (sum > 1000000) {
-            //         console.log(header);
-            //         console.log(chalk.rgb(7, 255, 7).bold(text));
-            //     }
-            // }
+            } else{
+                const header = 'Aggressive Buy';
+                
+                if ( sum >= 100000 && sum <= 300000) {
+                    updateElements(header, text, 'rgb(1, 53, 1)');
+                } else if (sum > 300000 && sum <= 600000) {
+                    updateElements(header, text, 'rgb(2, 101, 2)');
+                } else if (sum > 600000 && sum <= 1000000) {
+                    updateElements(header, text, 'rgb(6, 151, 6)');
+                } else if (sum > 1000000) {
+                    updateElements(header, text, 'rgb(7, 255, 7)');
+                }
+                
+            }
             
         }
         
