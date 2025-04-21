@@ -36,11 +36,6 @@ function startAggTrades() {
                     updateElements(header, text, 'rgb(255, 7, 7)');
                 }
                 
-                
-
-                
-
-                
 
                 
             }//else{
