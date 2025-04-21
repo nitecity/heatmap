@@ -35,6 +35,13 @@ h2 {
     text-align: center; /* Center headings */
 }
 
+.button-controls {
+    display: flex; /* Arrange items (buttons) in a row */
+    justify-content: center; /* Center the buttons horizontally within this container */
+    flex-wrap: wrap; /* Allow wrapping on very small screens if needed */
+    margin-bottom: 15px; /* Add space below the button group */
+}
+
 .buttons {
     cursor: pointer;
     border: none;
@@ -75,7 +82,7 @@ h2 {
 .container.expanded {
     /* Adjust max-height if needed based on wrapped content */
     /* Let's increase it slightly to account for potential wrapping */
-    max-height: 450px; /* Example: Increased from 410px */
+    max-height: 460px; /* Example: Increased from 410px */
     overflow-y: auto;
 }
 
@@ -131,9 +138,14 @@ h2 {
         font-size: 1.1rem; /* Smaller headings */
     }
 
+    .button-controls {
+        margin-bottom: 10px; /* Maybe less space below buttons */
+     }
+
     .buttons {
        padding: 8px 12px;
        font-size: 13px;
+       margin: 3px;
     }
 
     .container {
