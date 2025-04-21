@@ -108,26 +108,6 @@ aggStopButton.addEventListener('click', stopAggTrades);
 aggStartButton.disabled = false;
 aggStopButton.disabled = true;
 
-// function updateElements(text, bg, light=false){
-//     const newData = document.createElement('div');
-//     newData.classList.add('new-data');
-//     newData.style.backgroundColor = bg;
-//     newData.innerHTML = text; // Use innerHTML since text includes &nbsp;
-
-//     container.prepend(newData);
-
-//     if (light) {
-//         newData.style.color = 'rgb(50, 50, 50)';
-//     } else {
-//          newData.style.color = '#e0e0e0';
-//     }
-
-//     const maxElements = 10;
-//     while(container.children.length > maxElements) {
-//         container.removeChild(container.lastChild);
-//     }
-// }
-
 function updateElements(textData, bg, light=false){ // Renamed first arg for clarity
     const newData = document.createElement('div');
     newData.classList.add('new-data');
@@ -137,7 +117,7 @@ function updateElements(textData, bg, light=false){ // Renamed first arg for cla
     // Example textData format: { price: 12345.67, sum: 500000, time: "10:30:00 AM" }
     newData.innerHTML = `
         <span class="trade-price">Price: ${textData.price}</span>
-        <span class="trade-amount">Amount: ${textData.sum.toLocaleString()} $</span>
+        <span class="trade-amount">Amount: ${textData.sum.toLocaleString()} </span>
         <span class="trade-time">Time: ${textData.time}</span>
     `; // Use innerHTML to create spans
 
