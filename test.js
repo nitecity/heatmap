@@ -41,6 +41,9 @@ function startAggTrades() {
                 const header = 'Aggressive Buy';
                 
                 if ( sum >= 100000 && sum <= 300000) {
+                    // ******** debugging ********
+                    console.log('Aggressive Buy');
+                    // ***************************
                     updateElements(header, text, 'rgb(1, 53, 1)');
                 } else if (sum > 300000 && sum <= 600000) {
                     updateElements(header, text, 'rgb(2, 101, 2)');
