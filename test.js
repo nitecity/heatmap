@@ -17,11 +17,11 @@ function startAggTrades() {
         const data = JSON.parse(event.data);
         
         if (data.e == 'aggTrade') {
-            const price = parseInt(data.p);
+            const price = parseFloat(data.p);
             const size = parseFloat(data.q);
             const time = new Date(data.T).toLocaleTimeString();
             const sum = parseInt(size * price);
-            const text = `Price: ${price} **** Size: ${sum.toLocaleString()} USDT **** Time: ${time}`;
+            const text = `Price: ${price}          Size: ${sum.toLocaleString()} $          Time: ${time}`;
 
             if (data.m){
                 const header = 'Aggressive Sell';
@@ -41,9 +41,6 @@ function startAggTrades() {
                 const header = 'Aggressive Buy';
                 
                 if ( sum >= 100000 && sum <= 300000) {
-                    // ******** debugging ********
-                    console.log('Aggressive Buy');
-                    // ***************************
                     updateElements(header, text, 'rgb(1, 53, 1)');
                 } else if (sum > 300000 && sum <= 600000) {
                     updateElements(header, text, 'rgb(2, 101, 2)');
