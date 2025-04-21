@@ -51,14 +51,14 @@ function design(asks, bids){
   resultBids.reverse();
   
   resultAsks.forEach(([price, size]) => {
-    const integer = parseInt(size * price);
-    console.log(`Price: ${price} ---- Size: ${integer.toLocaleString()} USDT`);
+    const sum = parseInt(size * price);
+    console.log(`Price: ${price} ---- Size: ${sum.toLocaleString()} USDT`);
   });
   console.log('Asks:');
   console.log('Bids:');
   resultBids.forEach(([price, size]) => {
-    const integer = parseInt(size * price);
-    console.log(`Price: ${price} ---- Size: ${integer.toLocaleString()} USDT`);
+    const sum = parseInt(size * price);
+    console.log(`Price: ${price} ---- Size: ${sum.toLocaleString()} USDT`);
   });
 
 }
