@@ -1,172 +1,126 @@
 const aggStartButton = document.getElementById('aggStartButton');
-// const heatmapStartButton = document.getElementById('heatmapStartButton');
-// const aggStopButton = document.getElementById('aggStopButton');
-// const heatmapStopButton = document.getElementById('heatmapStopButton');
+const aggStopButton = document.getElementById('aggStopButton');
 const container = document.getElementById('container');
+let currentWebSocket = null;
+
+// --- Add this Event Listener for the container ---
+container.addEventListener('click', () => {
+    container.classList.toggle('expanded');
+});
+// --- End of added Event Listener ---
 
 function startAggTrades() {
-    const socket = new WebSocket('wss://fstream.binance.com/ws/btcusdt@aggTrade');
+    // Close any existing connection before starting a new one
+    if (currentWebSocket) {
+        console.log('Closing existing WebSocket connection.');
+        currentWebSocket.close();
+    }
+
+    const socket = new WebSocket('wss://fstream.binance.com/ws/btcusdt@aggTrade/btcusdt');
+    currentWebSocket = socket; // Store the new socket
+
     socket.onopen = () => {
-        console.log('Connected to server');
+        console.log('Connected to Binance AggTrades stream');
+        aggStartButton.disabled = true;
+        aggStopButton.disabled = false;
     };
 
     socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        
-        if (data.e == 'aggTrade') {
-            const price = parseFloat(data.p);
-            const size = parseFloat(data.q);
-            const time = new Date(data.T).toLocaleTimeString();
-            const sum = parseInt(size * price);
-            const text = `Price: ${price} ---------- Amount: ${sum.toLocaleString()} $ ---------- Time: ${time}`;
+        try {
+            const data = JSON.parse(event.data);
 
-            if (data.m){
-                const header = 'Aggressive Sell';
-                
-                if ( sum >= 100000 && sum <= 300000) {
-                    updateElements(header, text, 'rgb(53, 1, 1)');
-                } else if (sum > 300000 && sum <= 600000) {
-                    updateElements(header, text, 'rgb(101, 2, 2)');
-                } else if (sum > 600000 && sum <= 1000000) {
-                    updateElements(header, text, 'rgb(151, 6, 6)');
-                } else if (sum > 1000000) {
-                    updateElements(header, text, 'rgb(255, 7, 7)');
-                }
+            if (data.e === 'aggTrade') {
+                const price = parseFloat(data.p);
+                const size = parseFloat(data.q);
+                const time = new Date(data.T).toLocaleTimeString();
+                const sum = Math.round(size * price); // Use Math.round for cleaner integer
+                // Format Price nicely maybe? (optional)
+                // const formattedPrice = price.toFixed(2); // Example: 2 decimal places
+                const text = `Price: ${price} &nbsp;&nbsp;&nbsp; Amount: ${sum.toLocaleString()} &nbsp;&nbsp;&nbsp; Time: ${time}`; // Use &nbsp; for non-breaking spaces
 
-                
-            } else{
-                const header = 'Aggressive Buy';
-                
-                if ( sum >= 100000 && sum <= 300000) {
-                    updateElements(header, text, 'rgb(1, 53, 1)');
-                } else if (sum > 300000 && sum <= 600000) {
-                    updateElements(header, text, 'rgb(2, 101, 2)');
-                } else if (sum > 600000 && sum <= 1000000) {
-                    updateElements(header, text, 'rgb(6, 151, 6)');
-                } else if (sum > 1000000) {
-                    updateElements(header, text, 'rgb(7, 255, 7)');
+                let bgColor = null;
+                let lightText = false;
+
+                // --- Simplified color logic ---
+                const isMaker = data.m; // true if maker (sell side in context of buyer=taker)
+                const threshold1 = 100000;
+                const threshold2 = 300000;
+                const threshold3 = 600000;
+                const threshold4 = 1000000;
+
+                if (sum >= threshold1) {
+                    if (isMaker) { // Sells (Red shades)
+                        if (sum < threshold2) bgColor = 'rgb(53, 1, 1)';
+                        else if (sum < threshold3) bgColor = 'rgb(101, 2, 2)';
+                        else if (sum < threshold4) bgColor = 'rgb(151, 6, 6)';
+                        else { bgColor = 'rgb(255, 7, 7)'; lightText = true; }
+                    } else { // Buys (Green shades)
+                        if (sum < threshold2) bgColor = 'rgb(1, 53, 1)';
+                        else if (sum < threshold3) bgColor = 'rgb(2, 101, 2)';
+                        else if (sum < threshold4) bgColor = 'rgb(6, 151, 6)';
+                        else { bgColor = 'rgb(7, 255, 7)'; lightText = true; }
+                    }
                 }
-                
+                // --- End of simplified color logic ---
+
+                if (bgColor) { // Only update if a color was assigned (i.e., sum >= threshold1)
+                    updateElements(text, bgColor, lightText);
+                }
             }
-            
+        } catch (error) {
+            console.error("Error processing message:", error, event.data);
         }
-        
-
     };
 
     socket.onerror = (err) => {
         console.error('WebSocket error:', err);
+        // Maybe re-enable buttons here?
+        aggStartButton.disabled = false;
+        aggStopButton.disabled = true;
+        currentWebSocket = null;
     };
+
+    socket.onclose = (event) => {
+        console.log('WebSocket disconnected:', event.reason || 'No reason given');
+        aggStartButton.disabled = false;
+        aggStopButton.disabled = true;
+        currentWebSocket = null;
+    };
+
 }
 
 function stopAggTrades() {
-    socket.close();
-    console.log('Disconnected from server');
-    // html logic here
-}
-
-function startHeatmap() {
-    getData();
-    setInterval(() => {
-        getData();
-    }, 20000);
-}
-
-function stopHeatmap() {
-    // stop the heatmap
-}
-
-async function getData(){
-    const symbol = 'BTCUSDT';
-    const limit = 1000;
-    const url = 'https://fapi.binance.com';
-    const path = `/fapi/v1/depth?symbol=${symbol}&limit=${limit}`;
-    try {
-        const response = await fetch(url+path);
-        const data = await response.json();
-        const asks = data.asks;
-        const bids = data.bids;
-        design(asks, bids);
-        
-    } catch(error){
-        console.error('Error: ', error);
+    if (currentWebSocket) {
+        currentWebSocket.close();
+        console.log('Manually disconnected from server');
+        // State is updated in the onclose handler
+    } else {
+        console.log('No active WebSocket to stop.');
     }
 }
 
-function design(asks, bids){
-    const remapAsks = {};
-    const remapBids = {};
+aggStartButton.addEventListener('click', startAggTrades);
+aggStopButton.addEventListener('click', stopAggTrades);
 
-    for(let [price, size] of asks){
-        price = parseInt(price);
-        size = parseFloat(size);
+aggStartButton.disabled = false;
+aggStopButton.disabled = true;
 
-        if (remapAsks[price]){
-            remapAsks[price] += size;
-        } else {
-            remapAsks[price] = size;
-        }
-    }
-
-    for(let [price,size] of bids){
-        price = parseInt(price);
-        size = parseFloat(size);
-
-        if (remapBids[price]) {
-            remapBids[price] += size;
-        } else {
-            remapBids[price] = size;
-        }
-    }
-
-    const resultAsks = Object.entries(remapAsks).map(([key, value]) => [parseInt(key), value]);
-    const resultBids = Object.entries(remapBids).map(([key, value]) => [parseInt(key), value]);
-    resultAsks.reverse();
-    resultBids.reverse();
-    
-    resultAsks.forEach(([price, size]) => {
-        const sum = parseInt(size * price);
-        console.log(`Price: ${price} ---- Size: ${sum.toLocaleString()} USDT`);
-    });
-    console.log('Asks:');
-    console.log('Bids:');
-    resultBids.forEach(([price, size]) => {
-        const sum = parseInt(size * price);
-        console.log(`Price: ${price} ---- Size: ${sum.toLocaleString()} USDT`);
-    });
-
-}
-
-
-//startAggTrades();
-//startHeatmap();
-
-aggStartButton.addEventListener('click', (e) => {
-    
-        startAggTrades();
-    // } else if (e.target === aggStopButton) {
-    //     stopAggTrades();
-    // } else if (e.target === heatmapStartButton) {
-    //     startHeatmap();
-    // } else if (e.target === heatmapStopButton) {
-    //     stopHeatmap();
-    // }
-});
-
-
-function updateElements(header, text, bg){
+function updateElements(text, bg, light=false){
     const newData = document.createElement('div');
+    newData.classList.add('new-data');
     newData.style.backgroundColor = bg;
-    newData.style.borderRadius = '5px';
-    newData.style.padding = '10px';
-    newData.style.margin = '5px';
-    newData.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
-    newData.style.fontSize = '14px';
-    newData.innerHTML = header + '<br/>' + text;
-    //newData.style.color = 'white';
-    newData.style.fontWeight = 'bold';
+    newData.innerHTML = text; // Use innerHTML since text includes &nbsp;
+
     container.prepend(newData);
-    while(container.children.length > 10) {
+
+    if (light) {
+        newData.style.color = 'rgb(50, 50, 50)';
+    } else {
+         newData.style.color = '#e0e0e0';
+    }
+
+    const maxElements = 10;
+    while(container.children.length > maxElements) {
         container.removeChild(container.lastChild);
     }
 }

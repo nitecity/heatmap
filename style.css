@@ -9,19 +9,6 @@
     font-variation-settings:"wdth" 100;
 }
 
-.table {
-    text-align: center;
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ccc;
-}
-
-.table th {
-    background-color: #555;
-    color: rgb(214, 214, 214);
-    font-size: 18px;
-}
-
 body {
     background-color: #1a1a1a;
     color: #b8b8b8;
@@ -31,69 +18,92 @@ body {
     align-items: center;
 }
 
-.container {
-    
-    justify-content: center;
-    align-items: center;
+.main {
+    display: flex; /* Use flexbox for main layout */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center items horizontally */
     background-color: #333;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    max-width: 800px; /* Optional: prevent it getting too wide */
+    width: 90%; /* Responsive width */
 }
 
-#sym {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #d4c1a6;
-    margin-right: 20px;
+h2 {
+    margin-bottom: 15px; /* Add some space below headings */
+    text-align: center; /* Center headings */
 }
 
-.button {
+.buttons {
     cursor: pointer;
     border: none;
-    color: white;
-    padding: 15px 20px;
+    color: rgb(184, 184, 184);
+    padding: 10px 15px; /* Slightly smaller buttons */
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    border-radius: 12px;
+    font-size: 14px; /* Slightly smaller font */
+    border-radius: 8px; /* Adjusted border radius */
     transition: background-color 0.3s;
+    background-color: #3a3a3a;
+    margin: 5px;
 }
 
-#start {
-    background-color: #4CAF50;
+.buttons:hover {
+    background-color: #555;
+}
+.buttons:active {
+    background-color: #777;
 }
 
-#stop {
-    background-color: #b50a6b;
+/* Styles for the container */
+.container {
+    border: 1px solid #555; /* Add border to see it */
+    border-radius: 5px;
+    margin-top: 20px; /* Space above the container */
+    width: 100%; /* Take full width of parent */
+    background-color: #2a2a2a; /* Slightly different bg */
+    overflow: hidden; /* Hide overflowing content */
+    max-height: 60px; /* Initial collapsed height (adjust as needed) */
+    transition: max-height 0.5s ease-in-out; /* Smooth transition for height */
+    cursor: pointer; /* Indicate it's clickable */
+    position: relative; /* Needed for pseudo-element */
 }
 
-.box {
-    cursor: pointer;
-    display: inline-block;
-    color:#000000;
-    background-color: #f9d33a;
-    width: 95px;
-    height: 50px;
-    border: 2px solid rgb(177, 177, 177);
-    border-radius: 8px;
-    text-align: center; 
-    vertical-align: middle;
-    line-height: 50px;
-    font-size: 15px;
-    margin-right: 3px;
-    margin-bottom: 7px;
-    margin-top: 5px;
+/* Style for the expanded state */
+.container.expanded {
+    /* Estimate a reasonable max height for ~10 items */
+    /* Each .new-data is ~34px (padding + font) + 5px margin = ~39px */
+    /* 10 items * 39px = 390px. Add some buffer = ~410px */
+    max-height: 450px;
+    overflow-y: auto; /* Allow vertical scrolling if content exceeds max-height */
 }
 
-#failed {
-    color: #c50a46;
-    padding-bottom: 8px;
+/* Optional: Add an indicator when collapsed */
+.container:not(.expanded)::after {
+    content: 'Click to expand ▼';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #888;
+    background-color: #2a2a2a; /* Match container bg */
+    padding: 2px 5px;
+    border-radius: 3px;
 }
 
-#alarmEmoji {
-    cursor: pointer;
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+
+.new-data {
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    box-shadow : 0 0 5px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    font-size: 14px;
+    font-weight: bold;
+    /* Ensure text doesn't wrap unnecessarily */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
