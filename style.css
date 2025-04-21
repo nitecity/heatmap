@@ -57,30 +57,28 @@ h2 {
     background-color: #777;
 }
 
-/* Styles for the container */
+/* --- Keep existing styles above --- */
+
 .container {
-    border: 1px solid #555; /* Add border to see it */
+    border: 1px solid #555;
     border-radius: 5px;
-    margin-top: 20px; /* Space above the container */
-    width: 100%; /* Take full width of parent */
-    background-color: #2a2a2a; /* Slightly different bg */
-    overflow: hidden; /* Hide overflowing content */
-    max-height: 60px; /* Initial collapsed height (adjust as needed) */
-    transition: max-height 0.5s ease-in-out; /* Smooth transition for height */
-    cursor: pointer; /* Indicate it's clickable */
-    position: relative; /* Needed for pseudo-element */
+    margin-top: 20px;
+    width: 100%;
+    background-color: #2a2a2a;
+    overflow: hidden;
+    max-height: 60px; /* Initial collapsed height */
+    transition: max-height 0.5s ease-in-out;
+    cursor: pointer;
+    position: relative;
 }
 
-/* Style for the expanded state */
 .container.expanded {
-    /* Estimate a reasonable max height for ~10 items */
-    /* Each .new-data is ~34px (padding + font) + 5px margin = ~39px */
-    /* 10 items * 39px = 390px. Add some buffer = ~410px */
-    max-height: 450px;
-    overflow-y: auto; /* Allow vertical scrolling if content exceeds max-height */
+    /* Adjust max-height if needed based on wrapped content */
+    /* Let's increase it slightly to account for potential wrapping */
+    max-height: 450px; /* Example: Increased from 410px */
+    overflow-y: auto;
 }
 
-/* Optional: Add an indicator when collapsed */
 .container:not(.expanded)::after {
     content: 'Click to expand ▼';
     position: absolute;
@@ -89,21 +87,83 @@ h2 {
     transform: translateX(-50%);
     font-size: 12px;
     color: #888;
-    background-color: #2a2a2a; /* Match container bg */
+    background-color: #2a2a2a;
     padding: 2px 5px;
     border-radius: 3px;
+    z-index: 1; /* Ensure it's above content if container is very short */
 }
 
 
 .new-data {
     border-radius: 5px;
-    padding: 10px;
+    padding: 8px 10px; /* Adjust padding slightly */
     margin: 5px;
-    box-shadow : 0 0 5px rgba(0, 0, 0, 0.2); /* Softer shadow */
-    font-size: 14px;
+    box-shadow : 0 0 5px rgba(0, 0, 0, 0.2);
+    font-size: 14px; /* Base font size */
     font-weight: bold;
-    /* Ensure text doesn't wrap unnecessarily */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.4; /* Better readability for wrapped text */
+    /* REMOVE these lines: */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    word-break: break-word; /* Helps break long words if needed, though less likely here */
 }
+
+/* Target the spans we will add in JS for better control */
+.new-data span {
+    display: inline-block; /* Allows margin/padding */
+    margin-right: 8px; /* Space between data points */
+    margin-bottom: 3px; /* Add a little space if it wraps */
+}
+.new-data span:last-child {
+    margin-right: 0; /* No need for margin on the last item */
+}
+
+
+/* --- Media Query for smaller screens (e.g., phones) --- */
+@media (max-width: 600px) {
+    .main {
+        padding: 15px; /* Less padding on main container */
+        width: 95%; /* Use slightly more screen width */
+    }
+
+    h2 {
+        font-size: 1.1rem; /* Smaller headings */
+    }
+
+    .buttons {
+       padding: 8px 12px;
+       font-size: 13px;
+    }
+
+    .container {
+        max-height: 50px; /* Adjust collapsed height for smaller screens */
+    }
+     .container.expanded {
+        max-height: 350px; /* Adjust expanded height if needed */
+    }
+
+    .new-data {
+        font-size: 12px; /* Smaller font inside data divs */
+        padding: 6px 8px; /* Less padding */
+    }
+
+    .new-data span {
+        margin-right: 5px; /* Slightly less space between items */
+    }
+
+    /* Optional: Stack data vertically on very small screens */
+    /* @media (max-width: 400px) {
+        .new-data span {
+            display: block; // Each piece of data on its own line
+            margin-right: 0;
+            margin-bottom: 2px;
+        }
+        .new-data span:last-child {
+            margin-bottom: 0;
+        }
+    } */
+}
+
+/* --- Keep existing styles below --- */
+
