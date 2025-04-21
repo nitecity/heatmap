@@ -1,0 +1,18 @@
+.container {
+    display: flex; /* Enable flexbox for the container */
+    align-items: center; /* Align items vertically if needed */
+}
+.box {
+    width: 200px;
+    height: 100px;
+    background-color: #4CAF50;
+    text-align: center;
+    line-height: 100px; /* Vertically center the text */
+    color: white;
+    font-size: 18px;
+    margin-right: 10px; /* Add spacing between the div and span */
+}
+.span-text {
+    font-size: 18px;
+    color: #333;
+}
