@@ -31,8 +31,12 @@ body {
 }
 
 h2 {
-    margin-bottom: 15px; /* Add some space below headings */
-    text-align: center; /* Center headings */
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+h4 {
+    font-style: italic;
 }
 
 .button-controls {
@@ -45,7 +49,7 @@ h2 {
 .buttons {
     cursor: pointer;
     border: none;
-    color: rgb(184, 184, 184);
+    color: rgb(221, 220, 220);
     padding: 10px 15px; /* Slightly smaller buttons */
     text-align: center;
     text-decoration: none;
