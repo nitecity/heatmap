@@ -49,7 +49,7 @@ h4 {
 .buttons {
     cursor: pointer;
     border: none;
-    color: rgb(221, 220, 220);
+    color: #d2d2d2;
     padding: 10px 15px;
     text-align: center;
     text-decoration: none;
@@ -57,12 +57,12 @@ h4 {
     font-size: 14px;
     border-radius: 8px;
     transition: background-color 0.3s;
-    background-color: #26002e;
+    background-color: #4d1500;
     margin: 5px;
 }
 
 .buttons:hover {
-    background-color: #3e004a;
+    background-color: #752100;
 }
 .buttons:active {
     background-color: #360041;
