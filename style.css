@@ -19,15 +19,15 @@ body {
 }
 
 .main {
-    display: flex; /* Use flexbox for main layout */
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center items horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: #333;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    max-width: 800px; /* Optional: prevent it getting too wide */
-    width: 90%; /* Responsive width */
+    max-width: 800px;
+    width: 90%;
 }
 
 h2 {
@@ -40,22 +40,22 @@ h4 {
 }
 
 .button-controls {
-    display: flex; /* Arrange items (buttons) in a row */
-    justify-content: center; /* Center the buttons horizontally within this container */
-    flex-wrap: wrap; /* Allow wrapping on very small screens if needed */
-    margin-bottom: 15px; /* Add space below the button group */
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
 }
 
 .buttons {
     cursor: pointer;
     border: none;
     color: rgb(221, 220, 220);
-    padding: 10px 15px; /* Slightly smaller buttons */
+    padding: 10px 15px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 14px; /* Slightly smaller font */
-    border-radius: 8px; /* Adjusted border radius */
+    font-size: 14px;
+    border-radius: 8px;
     transition: background-color 0.3s;
     background-color: #3a3a3a;
     margin: 5px;
@@ -68,8 +68,6 @@ h4 {
     background-color: #777;
 }
 
-/* --- Keep existing styles above --- */
-
 .container {
     border: 1px solid #555;
     border-radius: 5px;
@@ -77,16 +75,14 @@ h4 {
     width: 100%;
     background-color: #2a2a2a;
     overflow: hidden;
-    max-height: 60px; /* Initial collapsed height */
+    max-height: 60px;
     transition: max-height 0.5s ease-in-out;
     cursor: pointer;
     position: relative;
 }
 
 .container.expanded {
-    /* Adjust max-height if needed based on wrapped content */
-    /* Let's increase it slightly to account for potential wrapping */
-    max-height: 460px; /* Example: Increased from 410px */
+    max-height: 460px;
     overflow-y: auto;
 }
 
@@ -101,49 +97,48 @@ h4 {
     background-color: #2a2a2a;
     padding: 2px 5px;
     border-radius: 3px;
-    z-index: 1; /* Ensure it's above content if container is very short */
+    z-index: 1;
 }
 
 
 .new-data {
     border-radius: 5px;
-    padding: 8px 10px; /* Adjust padding slightly */
+    padding: 8px 10px;
     margin: 5px;
     box-shadow : 0 0 5px rgba(0, 0, 0, 0.2);
-    font-size: 14px; /* Base font size */
+    font-size: 14px; 
     font-weight: bold;
-    line-height: 1.4; /* Better readability for wrapped text */
-    /* REMOVE these lines: */
-    /* white-space: nowrap; */
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; */
-    word-break: break-word; /* Helps break long words if needed, though less likely here */
+    line-height: 1.4;
+    word-break: break-word;
 }
 
-/* Target the spans we will add in JS for better control */
 .new-data span {
-    display: inline-block; /* Allows margin/padding */
-    margin-right: 8px; /* Space between data points */
-    margin-bottom: 3px; /* Add a little space if it wraps */
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 3px;
 }
 .new-data span:last-child {
-    margin-right: 0; /* No need for margin on the last item */
+    margin-right: 0;
 }
 
 
-/* --- Media Query for smaller screens (e.g., phones) --- */
+.oi {
+    color: rgb(86, 170, 249)
+}
+
+
 @media (max-width: 600px) {
     .main {
-        padding: 15px; /* Less padding on main container */
-        width: 95%; /* Use slightly more screen width */
+        padding: 15px;
+        width: 95%;
     }
 
     h2 {
-        font-size: 1.1rem; /* Smaller headings */
+        font-size: 1.1rem;
     }
 
     .button-controls {
-        margin-bottom: 10px; /* Maybe less space below buttons */
+        margin-bottom: 10px;
      }
 
     .buttons {
@@ -153,33 +148,20 @@ h4 {
     }
 
     .container {
-        max-height: 50px; /* Adjust collapsed height for smaller screens */
+        max-height: 50px;
     }
      .container.expanded {
-        max-height: 350px; /* Adjust expanded height if needed */
+        max-height: 350px;
     }
 
     .new-data {
-        font-size: 12px; /* Smaller font inside data divs */
-        padding: 6px 8px; /* Less padding */
+        font-size: 12px;
+        padding: 6px 8px;
     }
 
     .new-data span {
-        margin-right: 5px; /* Slightly less space between items */
+        margin-right: 5px;
     }
 
-    /* Optional: Stack data vertically on very small screens */
-    /* @media (max-width: 400px) {
-        .new-data span {
-            display: block; // Each piece of data on its own line
-            margin-right: 0;
-            margin-bottom: 2px;
-        }
-        .new-data span:last-child {
-            margin-bottom: 0;
-        }
-    } */
 }
-
-/* --- Keep existing styles below --- */
 
