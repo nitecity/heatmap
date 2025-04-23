@@ -121,7 +121,7 @@ function updateElements(textData, bg, light=false){
          newData.style.color = '#e0e0e0';
     }
 
-    const maxElements = 10;
+    const maxElements = 15;
     while(container.children.length > maxElements) {
         container.removeChild(container.lastChild);
     }
