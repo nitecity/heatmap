@@ -2,11 +2,11 @@
     "frame": {
       "version": "1",
       "name": "Big Trades",
-      "iconUrl": "https://nitecity.github.io/trades/bigtradeslogo.png",
-      "homeUrl": "https://nitecity.github.io/trades/",
-      "imageUrl": "https://nitecity.github.io/trades/bigtradeslogo.png",
+      "iconUrl": "https://trades-zeta.vercel.app/bigtradeslogo.png",
+      "homeUrl": "https://trades-zeta.vercel.app/",
+      "imageUrl": "https://trades-zeta.vercel.app/bigtradeslogo.png",
       "buttonTitle": "Start",
-      "splashImageUrl": "https://nitecity.github.io/trades/bigtradeslogo.png",
+      "splashImageUrl": "https://trades-zeta.vercel.app/bigtradeslogo.png",
       "splashBackgroundColor": "#1a1a1a"
     }
 }
