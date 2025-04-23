@@ -22,7 +22,10 @@
             <div id="oi"></div>
             <div id="container" class="container"></div>
         </div>
-        
+        <script type="module">
+            import { sdk } from 'https://esm.sh/@farcaster/frame-sdk'
+            await sdk.actions.ready();
+        </script>
         <script src="./script.js"></script>
     </body>
 </html>
