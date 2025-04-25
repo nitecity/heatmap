@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="fc:frame" content='{"version":"next","imageUrl":"https://trades-zeta.vercel.app/bigtradeslogo.png","button":{"title":"Start","action":{"type":"launch_frame","name":"Big Trades","url":"https://trades-zeta.vercel.app/","splashImageUrl":"https://trades-zeta.vercel.app/bigtradeslogo.png","splashBackgroundColor":"#1a1a1a"}}}' />
-        <title>Big Trades</title>
+        <title>Heatmap</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
@@ -12,20 +12,22 @@
     </head>
     <body>
         <div class="main">
-            <h2>Real-time Big Trades</h2>
-            <p>"Binance-BTC"</p>
-            <div class="button-controls">
-                <button id="aggStartButton" class="buttons">Start</button>
-                <button id="aggStopButton" class="buttons">Stop</button>
-            </div>
-            <h4>Wait for a few seconds after click</h4>
-            <div id="oi"></div>
-            <div id="container" class="container"></div>
+            <h2>Real-time Big Trades,Heatmap and Mark Price</h2>
+            <h3>Binance-BTC</h3>
+            <button id="pause" class="button">Pause</button>
+            <div id="markPrice" class="markPrice">Mark Price: Wait...</div>
+            <div id="oi" class="oi">Open Interest: Wait...</div>
+            <h3>Big Trades</h3>
+            <div id="container1" class="container"></div>
+            <h3>Heatmap</h3>
+            <div id="container2" class="container"></div>
         </div>
+        
         <script type="module">
             import { sdk } from 'https://esm.sh/@farcaster/frame-sdk'
             await sdk.actions.ready();
         </script>
+        
         <script src="./script.js"></script>
     </body>
 </html>
