@@ -168,18 +168,4 @@ h3 {
         margin-right: 5px;
     }
 
-    .markPrice, .oi {
-        color:#8b8b8b;
-        font-size: 16px;
-    }
-    
-    .markPrice span, .oi span {
-        color: #f4e4d5;
-        font-weight: bold;
-    }
-    
-    .oi {
-        margin-bottom: 10px;
-    }
-
 }

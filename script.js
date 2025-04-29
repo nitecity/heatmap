@@ -5,6 +5,9 @@ const oi = document.getElementById('oi');
 const pause = document.getElementById('pause');
 
 let isPaused = false;
+let intervalId1 = null;
+let intervalId2 = null;
+let currentPrice = null;
 
 container1.addEventListener('click', () => {
     container1.classList.toggle('expanded');
@@ -17,18 +20,17 @@ pause.addEventListener('click', () => {
     if(!isPaused){
         isPaused = true;
         pause.textContent = 'Resume';
+        stopInterval();
     }else{
         isPaused = false;
         pause.textContent = 'Pause';
+        startInterval();
     }
-    
-    console.log('WebSocket stream paused.');
     
 });
 
 function connect() {
-    const socket = new WebSocket('wss://fstream.binance.com/ws/btcusdt@aggTrade/btcusdt@depth/btcusdt@markPrice@1s');
-    let lastUpdate = 0;
+    const socket = new WebSocket('wss://fstream.binance.com/ws/btcusdt@aggTrade/btcusdt@markPrice@1s');
     socket.onopen = () => {
         console.log('Connected to the Server');
         isPaused = false;
@@ -69,79 +71,9 @@ function connect() {
                     updateElement(price, sum, bgColor, 1, time, lightText);
                 }
 
-
-
-
-
-
-
-            } else if (data.e === 'depthUpdate') {
-                if (now - lastUpdate >= 1000) {
-                    lastUpdate = now;
-                    const asks = data.b;
-                    const bids = data.a;
-                    const asksObj = {};
-                    const bidsObj = {};
-
-                    for (let item of asks) {
-                        const price = parseInt(item[0]);
-                        const size = parseFloat(item[1]);
-
-                        if (size === 0) continue;
-                        if (asksObj[price]) {
-                            asksObj[price] += size;
-                        } else {
-                            asksObj[price] = size;
-                        }
-                    }
-
-                    for (let item of bids) {
-                        const price = parseInt(item[0]);
-                        const size = parseFloat(item[1]);
-
-                        if (size === 0) continue;
-                        if (bidsObj[price]) {
-                            bidsObj[price] += size;
-                        } else {
-                            bidsObj[price] = size;
-                        }
-                    }
-
-                    const asksArray = Object.entries(asksObj).map( ([price, size]) => [parseInt(price), size] );
-                    const bidsArray = Object.entries(bidsObj).map( ([price, size]) => [parseInt(price), size] );
-
-                    const mergeAll = [...asksArray, ...bidsArray];
-                    const sizeInUSD = mergeAll.map( ([price, size]) => {
-                        return [price, Math.round(price * size)];
-                    });
-
-                    sizeInUSD.sort((a, b) => a[1] - b[1]);
-
-                    const threshold1 = 500000;
-                    const threshold2 = 1000000;
-                    const threshold3 = 2000000;
-                    const threshold4 = 5000000;
-
-                    let bg = null;
-                    
-                    sizeInUSD.forEach( ([price, size]) => {
-                        //console.log(price);
-                        if      (size >= threshold1 && size < threshold2) bg = 'rgb(255, 251, 3)'; 
-                        else if (size >= threshold2 && size < threshold3) bg = 'rgb(255, 163, 3)';
-                        else if (size >= threshold3 && size < threshold4) bg = 'rgb(255, 58, 3)';
-                        else if (size >= threshold4)                      bg = 'rgb(255, 3, 3)';
-                        else                                              bg = 'rgb(172, 172, 172)';
-                        updateElement(price, size, bg, 2);
-                    });
-                }
-                
-
-
-
-
             } else if(data.e === 'markPriceUpdate') {
-                const price = parseFloat(data.p);
-                markPrice.innerHTML = `Mark Price: <span>${price.toFixed(2)}</span>`;
+                currentPrice = parseFloat(data.p);
+                markPrice.innerHTML = `Mark Price: <span>${currentPrice.toFixed(2)}</span>`;
             }
             
         }
@@ -158,9 +90,9 @@ function connect() {
         console.log('Reason: ', event.reason || 'no reason given');
     }
 
-    setInterval( () => {
-        openInterest()
-    }, 10000);
+    if (!isPaused) {
+        startInterval();
+    }
     
 }
 
@@ -174,7 +106,7 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false) {
     if(whatContainer == 1){
         newData.innerHTML = `
             <span>Price: ${price}</span>
-            <span>Amount: ${sum.toLocaleString()} </span>
+            <span>Amount: ${sum.toLocaleString()}</span>
             <span>Time: ${time}</span>
         `;
 
@@ -191,10 +123,20 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false) {
         }
 
     } else if(whatContainer == 2){
-        newData.innerHTML = `
-            <span>Price: ${price.toLocaleString()}</span>
-            <span>Amount: ${sum.toLocaleString()} </span>
-        `;
+        if (price > currentPrice) {
+            newData.innerHTML = `
+                <span>Price: ${price.toLocaleString()}</span>
+                <span>Amount: ${sum.toLocaleString()} </span>
+                <span class="positionType">Short</span>
+            `;
+        } else if (price < currentPrice) {
+            newData.innerHTML = `
+                <span>Price: ${price.toLocaleString()}</span>
+                <span>Amount: ${sum.toLocaleString()} </span>
+                <span class="positionType">Long</span>
+            `;
+        }
+        
         container2.prepend(newData);
         while(container2.children.length > 15) {
             container2.removeChild(container2.lastChild);
@@ -212,5 +154,92 @@ async function openInterest() {
     oi.innerHTML = `Open Interest: <span class="oi">${openInt}</span> Contracts`;
 }
 
+
+async function getDepth() {
+    const url = 'https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=1000';
+    const response = await fetch(url);
+    const data = await response.json();
+    const asks = data.asks;
+    const bids = data.bids;
+
+    const asksObj = {};
+    const bidsObj = {};
+
+    asks.forEach((ask) => {
+        const price = parseInt(ask[0]);
+        const amount = parseFloat(ask[1]);
+        if (asksObj[price]) {
+            asksObj[price] += amount;
+        } else {
+            asksObj[price] = amount;
+        }
+    });
+
+    bids.forEach((bid) => {
+        const price = parseInt(bid[0]);
+        const amount = parseFloat(bid[1]);
+        if (bidsObj[price]) {
+            bidsObj[price] += amount;
+        } else {
+            bidsObj[price] = amount;
+        }
+    });
+
+    const asksResult = Object.entries(asksObj).map( ([price, amount]) => [parseInt(price), amount] );
+    const bidsResult = Object.entries(bidsObj).map( ([price, amount]) => [parseInt(price), amount] );
+
+    const mergeAll = [...asksResult, ...bidsResult];
+    const sizeInUSD = mergeAll.map( ([price, size]) => {
+        return [price, Math.round(price * size)];
+    });
+
+    sizeInUSD.sort( (a,b) => a[1] - b[1] );
+
+    const threshold1 = 500000;
+    const threshold2 = 1000000;
+    const threshold3 = 2000000;
+    const threshold4 = 5000000;
+
+    let bg = null;
+    
+    sizeInUSD.forEach( ([price, size]) => {
+        if      (size >= threshold1 && size < threshold2) bg = 'rgb(255, 251, 3)'; 
+        else if (size >= threshold2 && size < threshold3) bg = 'rgb(255, 163, 3)';
+        else if (size >= threshold3 && size < threshold4) bg = 'rgb(255, 58, 3)';
+        else if (size >= threshold4)                      bg = 'rgb(255, 3, 3)';
+        else                                              bg = 'rgb(172, 172, 172)';
+        updateElement(price, size, bg, 2);
+    });
+
+
+}
+
+function startInterval(currentPrice){
+    if(!intervalId1) {
+        intervalId1 = setInterval( () => {
+            openInterest();
+        }, 5000);
+    }
+
+    if(!intervalId2) {
+        intervalId2 = setInterval( () => {
+            getDepth(currentPrice);
+        }, 5000);
+    }
+    console.log('Intervals and Websocket Resumed');
+}
+
+function stopInterval() {
+    if (intervalId1) {
+        clearInterval(intervalId1);
+        intervalId1 = null;
+    }
+
+    if (intervalId2) {
+        clearInterval(intervalId2);
+        intervalId2 = null;
+    }
+    console.log('Intervals and Websocket Paused');
+}
 
 connect();
