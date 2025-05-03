@@ -3,11 +3,15 @@ const container2 = document.getElementById('container2');
 const markPrice = document.getElementById('markPrice');
 const oi = document.getElementById('oi');
 const pause = document.getElementById('pause');
+const temp = document.getElementById('temp');
 
 let isPaused = false;
-let intervalId1 = null;
-let intervalId2 = null;
+let intervalId = null;
 let currentPrice = null;
+
+setTimeout( () => {
+    temp.classList.add('temp');
+}, 10000);
 
 container1.addEventListener('click', () => {
     container1.classList.toggle('expanded');
@@ -123,17 +127,17 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false) {
         }
 
     } else if(whatContainer == 2){
-        if (price > currentPrice) {
+        if (price >= currentPrice) {
             newData.innerHTML = `
                 <span>Price: ${price.toLocaleString()}</span>
                 <span>Amount: ${sum.toLocaleString()} </span>
-                <span class="positionType">Short</span>
+                <span class="positionType">Shorts</span>
             `;
-        } else if (price < currentPrice) {
+        } else {
             newData.innerHTML = `
                 <span>Price: ${price.toLocaleString()}</span>
                 <span>Amount: ${sum.toLocaleString()} </span>
-                <span class="positionType">Long</span>
+                <span class="positionType">Longs</span>
             `;
         }
         
@@ -215,14 +219,9 @@ async function getDepth() {
 }
 
 function startInterval(currentPrice){
-    if(!intervalId1) {
-        intervalId1 = setInterval( () => {
+    if(!intervalId) {
+        intervalId = setInterval( () => {
             openInterest();
-        }, 5000);
-    }
-
-    if(!intervalId2) {
-        intervalId2 = setInterval( () => {
             getDepth(currentPrice);
         }, 5000);
     }
@@ -230,14 +229,9 @@ function startInterval(currentPrice){
 }
 
 function stopInterval() {
-    if (intervalId1) {
-        clearInterval(intervalId1);
-        intervalId1 = null;
-    }
-
-    if (intervalId2) {
-        clearInterval(intervalId2);
-        intervalId2 = null;
+    if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
     }
     console.log('Intervals and Websocket Paused');
 }

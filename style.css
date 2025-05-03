@@ -128,6 +128,16 @@ h3 {
     margin-bottom: 10px;
 }
 
+#temp {
+    color: #c6c6c6;
+    font-style: italic;
+    transition: opacity 1s ease;
+}
+
+.temp {
+    opacity: 0;
+}
+
 @media (max-width: 600px) {
     .main {
         padding: 15px;
@@ -166,6 +176,16 @@ h3 {
 
     .new-data span {
         margin-right: 5px;
+    }
+
+    #temp {
+        color: #c6c6c6;
+        font-style: italic;
+        transition: opacity 1s ease;
+    }
+    
+    .temp {
+        opacity: 0;
     }
 
 }
