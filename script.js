@@ -109,7 +109,7 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false) {
 
     if(whatContainer == 1){
         newData.innerHTML = `
-            <span>Price: ${price}</span>
+            <span>Price: ${price.toLocaleString()}</span>
             <span>Amount: ${sum.toLocaleString()}</span>
             <span>Time: ${time}</span>
         `;
@@ -131,13 +131,13 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false) {
             newData.innerHTML = `
                 <span>Price: ${price.toLocaleString()}</span>
                 <span>Amount: ${sum.toLocaleString()} </span>
-                <span class="positionType">Shorts</span>
+                <span class="positionType">Ask</span>
             `;
         } else {
             newData.innerHTML = `
                 <span>Price: ${price.toLocaleString()}</span>
                 <span>Amount: ${sum.toLocaleString()} </span>
-                <span class="positionType">Longs</span>
+                <span class="positionType">Bid</span>
             `;
         }
         
