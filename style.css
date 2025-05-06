@@ -102,6 +102,7 @@ h3 {
     font-weight: bold;
     line-height: 1.4;
     word-break: break-word;
+    text-align: center;
 }
 
 .new-data span {
