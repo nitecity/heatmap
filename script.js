@@ -7,7 +7,6 @@ const temp = document.getElementById('temp');
 
 let isPaused = false;
 let intervalId = null;
-let currentPrice = null;
 
 setTimeout( () => {
     temp.classList.add('temp');
@@ -25,10 +24,12 @@ pause.addEventListener('click', () => {
         isPaused = true;
         pause.textContent = 'Resume';
         stopInterval();
+        console.log('Paused');
     }else{
         isPaused = false;
         pause.textContent = 'Pause';
         startInterval();
+        console.log('Resumed');
     }
     
 });
@@ -76,7 +77,7 @@ function connect() {
                 }
 
             } else if(data.e === 'markPriceUpdate') {
-                currentPrice = parseFloat(data.p);
+                const currentPrice = parseFloat(data.p);
                 markPrice.innerHTML = `Mark Price: <span>${currentPrice.toFixed(2)}</span>`;
             }
             
@@ -101,8 +102,7 @@ function connect() {
 }
 
 
-
-function updateElement(price, sum, bg, whatContainer, time='', light=false) {
+function updateElement(price, sum, bg, whatContainer, time='', light=false, bidask='') {
     const newData = document.createElement('div');
     newData.classList.add('new-data');
     newData.style.backgroundColor = bg;
@@ -127,13 +127,13 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false) {
         }
 
     } else if(whatContainer == 2){
-        if (price >= currentPrice) {
+        if (bidask === 'ask') {
             newData.innerHTML = `
                 <span>Price: ${price.toLocaleString()}</span>
                 <span>Amount: ${sum.toLocaleString()} </span>
                 <span class="positionType">Ask</span>
             `;
-        } else {
+        } else if (bidask == 'bid') {
             newData.innerHTML = `
                 <span>Price: ${price.toLocaleString()}</span>
                 <span>Amount: ${sum.toLocaleString()} </span>
@@ -142,6 +142,13 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false) {
         }
         
         container2.prepend(newData);
+
+        if (light) {
+            newData.style.color = 'rgb(50, 50, 50)';
+        } else {
+            newData.style.color = '#e0e0e0';
+        }
+
         while(container2.children.length > 15) {
             container2.removeChild(container2.lastChild);
         }
@@ -192,27 +199,45 @@ async function getDepth() {
     const asksResult = Object.entries(asksObj).map( ([price, amount]) => [parseInt(price), amount] );
     const bidsResult = Object.entries(bidsObj).map( ([price, amount]) => [parseInt(price), amount] );
 
+    for (let i=0; i<asksResult.length; i++){
+        asksResult[i].push('ask');
+    }
+
+    for (let i=0; i<bidsResult.length; i++){
+        bidsResult[i].push('bid');
+    }
+
     const mergeAll = [...asksResult, ...bidsResult];
-    const sizeInUSD = mergeAll.map( ([price, size]) => {
-        return [price, Math.round(price * size)];
+    const sizeInUSD = mergeAll.map( ([price, size, bidask]) => {
+        return [price, Math.round(price * size), bidask];
     });
 
     sizeInUSD.sort( (a,b) => a[1] - b[1] );
 
     const threshold1 = 500000;
     const threshold2 = 1000000;
-    const threshold3 = 2000000;
-    const threshold4 = 5000000;
+    const threshold3 = 5000000;
+    const threshold4 = 10000000;
 
     let bg = null;
-    
-    sizeInUSD.forEach( ([price, size]) => {
-        if      (size >= threshold1 && size < threshold2) bg = 'rgb(255, 251, 3)'; 
-        else if (size >= threshold2 && size < threshold3) bg = 'rgb(255, 163, 3)';
-        else if (size >= threshold3 && size < threshold4) bg = 'rgb(255, 58, 3)';
-        else if (size >= threshold4)                      bg = 'rgb(255, 3, 3)';
-        else                                              bg = 'rgb(172, 172, 172)';
-        updateElement(price, size, bg, 2);
+    let lightText = false;
+    sizeInUSD.forEach( ([price, size, bidask]) => {
+        if (bidask === 'ask'){
+            if      (size >= threshold1 && size < threshold2) bg = 'rgb(52, 0, 0)'; 
+            else if (size >= threshold2 && size < threshold3) bg = 'rgb(91, 0, 0)';
+            else if (size >= threshold3 && size < threshold4) bg = 'rgb(154, 0, 0)';
+            else if (size >= threshold4)                     {bg = 'rgb(255, 3, 3)'; lightText = true;}
+            else                                              bg = 'rgb(172, 172, 172)';
+            updateElement(price, size, bg, 2, '', lightText, 'ask');
+        } else if (bidask === 'bid') {
+            if      (size >= threshold1 && size < threshold2) bg = 'rgb(7, 52, 0)'; 
+            else if (size >= threshold2 && size < threshold3) bg = 'rgb(26, 91, 0)';
+            else if (size >= threshold3 && size < threshold4) bg = 'rgb(15, 154, 0)';
+            else if (size >= threshold4)                     {bg = 'rgb(66, 255, 3)'; lightText = true;}
+            else                                              bg = 'rgb(172, 172, 172)';
+            updateElement(price, size, bg, 2, '', lightText, 'bid');
+        }
+        
     });
 
 
@@ -225,7 +250,6 @@ function startInterval(currentPrice){
             getDepth(currentPrice);
         }, 5000);
     }
-    console.log('Intervals and Websocket Resumed');
 }
 
 function stopInterval() {
@@ -233,7 +257,6 @@ function stopInterval() {
         clearInterval(intervalId);
         intervalId = null;
     }
-    console.log('Intervals and Websocket Paused');
 }
 
 connect();
