@@ -122,7 +122,7 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false, bida
             newData.style.color = '#e0e0e0';
         }
 
-        while(container1.children.length > 15) {
+        while(container1.children.length > 10) {
             container1.removeChild(container1.lastChild);
         }
 
@@ -149,7 +149,7 @@ function updateElement(price, sum, bg, whatContainer, time='', light=false, bida
             newData.style.color = '#e0e0e0';
         }
 
-        while(container2.children.length > 15) {
+        while(container2.children.length > 10) {
             container2.removeChild(container2.lastChild);
         }
     }
