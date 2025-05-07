@@ -4,9 +4,12 @@ const markPrice = document.getElementById('markPrice');
 const oi = document.getElementById('oi');
 const pause = document.getElementById('pause');
 const temp = document.getElementById('temp');
+const alarmSound = document.getElementById('alarmSound');
+const alarmEmoji = document.getElementById("alarmEmoji");
 
 let isPaused = false;
 let intervalId = null;
+let alarm = false;
 
 setTimeout( () => {
     temp.classList.add('temp');
@@ -32,6 +35,16 @@ pause.addEventListener('click', () => {
         console.log('Resumed');
     }
     
+});
+
+alarmEmoji.addEventListener('click', function () {
+    if (alarm) {
+        alarm = false;
+        alarmEmoji.innerText = '🔇';
+    } else {
+        alarm = true;
+        alarmEmoji.innerText = '🔊';
+    }
 });
 
 function connect() {
@@ -226,14 +239,22 @@ async function getDepth() {
             if      (size >= threshold1 && size < threshold2) bg = 'rgb(52, 0, 0)'; 
             else if (size >= threshold2 && size < threshold3) bg = 'rgb(91, 0, 0)';
             else if (size >= threshold3 && size < threshold4) bg = 'rgb(154, 0, 0)';
-            else if (size >= threshold4)                     {bg = 'rgb(255, 3, 3)'; lightText = true;}
+            else if (size >= threshold4)                     {
+                bg = 'rgb(255, 3, 3)';
+                lightText = true;
+                if (alarm) alarmSound.play();
+            }
             else                                              bg = 'rgb(172, 172, 172)';
             updateElement(price, size, bg, 2, '', lightText, 'ask');
         } else if (bidask === 'bid') {
-            if      (size >= threshold1 && size < threshold2) bg = 'rgb(7, 52, 0)'; 
+            if      (size >= threshold1 && size < threshold2) bg = 'rgb(7, 52, 0)';
             else if (size >= threshold2 && size < threshold3) bg = 'rgb(26, 91, 0)';
             else if (size >= threshold3 && size < threshold4) bg = 'rgb(15, 154, 0)';
-            else if (size >= threshold4)                     {bg = 'rgb(66, 255, 3)'; lightText = true;}
+            else if (size >= threshold4) {
+                bg = 'rgb(66, 255, 3)';
+                lightText = true;
+                if (alarm) alarmSound.play();
+            }
             else                                              bg = 'rgb(172, 172, 172)';
             updateElement(price, size, bg, 2, '', lightText, 'bid');
         }
