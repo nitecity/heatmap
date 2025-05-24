@@ -13,6 +13,7 @@ let alarm = false;
 
 setTimeout( () => {
     temp.classList.add('temp');
+    temp.remove();
 }, 10000);
 
 container1.addEventListener('click', () => {

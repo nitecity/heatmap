@@ -1,5 +1,10 @@
-* {
-    box-sizing: border-box;
+body {
+    display: flex;
+    text-align: center;
+    background-color: #012336;
+    align-items: center;
+    justify-content: center;
+    margin:0;
     margin: 10px;
     padding: 0;
     font-family: "IBM Plex Sans", sans-serif;
@@ -9,33 +14,13 @@
     font-variation-settings:"wdth" 100;
 }
 
-body {
-    text-align: center;
-    background-color: #012336;
+.main {
+    background-color: rgb(2, 50, 82);
+    padding: 15px;
+    border-radius: 20px;
+    width: 60%;
 }
 
-/* .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgb(0, 39, 56);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    max-width: 800px;
-    width: 90%;
-} */
-
-h2 {
-    margin-bottom: 15px;
-    text-align: center;
-    color: #c6c6c6;
-}
-
-h3 {
-    margin-top: 20px;
-    color: #c6c6c6;
-}
 .container {
     border: 1px solid #555;
     border-radius: 5px;
@@ -51,7 +36,6 @@ h3 {
 
 .container.expanded {
     max-height: 500px;
-    overflow-y: auto;
 }
 
 .container:not(.expanded)::after {
@@ -68,23 +52,33 @@ h3 {
     z-index: 1;
 }
 
+h3 {
+    margin-top: 20px;
+    color: #c6c6c6;
+}
+
+.head {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    text-align: center;
+    color: #c6c6c6;
+}
+
 .button {
     cursor: pointer;
     border: none;
     color: #d2d2d2;
     padding: 10px 15px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size: 14px;
     border-radius: 8px;
     transition: background-color 0.3s;
     background-color: #00578d;
-    margin: 5px;
+    margin: 10px 0 10px 0;
 }
 
 .button:hover {
-    background-color: #752100;
+    background-color: rgb(0, 96, 213);
 }
 .button:active {
     background-color: #360041;
@@ -94,7 +88,6 @@ h3 {
     border-radius: 5px;
     padding: 8px 10px;
     margin: 5px;
-    box-shadow : 0 0 5px rgba(0, 0, 0, 0.2);
     font-size: 14px; 
     font-weight: bold;
     line-height: 1.4;
@@ -122,10 +115,6 @@ h3 {
     font-weight: bold;
 }
 
-.oi {
-    margin-bottom: 10px;
-}
-
 #temp {
     color: #c6c6c6;
     font-style: italic;
@@ -138,7 +127,7 @@ h3 {
 
 #alarmEmoji {
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 20px;
 }
 
 @media (max-width: 600px) {
@@ -148,21 +137,7 @@ h3 {
     }
 
     h2 {
-        font-size: 1.1rem;
-    }
-
-    h3 {
-        margin-top: 20px;
-    }
-
-    .button-controls {
-        margin-bottom: 10px;
-     }
-
-    .buttons {
-       padding: 8px 12px;
-       font-size: 13px;
-       margin: 3px;
+        font-size: 22px;
     }
 
     .container {
@@ -173,22 +148,10 @@ h3 {
     }
 
     .new-data {
-        font-size: 14px;
         padding: 6px 8px;
     }
 
     .new-data span {
         margin-right: 5px;
     }
-
-    #temp {
-        color: #c6c6c6;
-        font-style: italic;
-        transition: opacity 1s ease;
-    }
-    
-    .temp {
-        opacity: 0;
-    }
-
 }
