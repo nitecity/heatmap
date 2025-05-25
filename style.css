@@ -24,7 +24,6 @@ body {
 .container {
     border: 1px solid #555;
     border-radius: 5px;
-    margin-top: 20px;
     width: 100%;
     background-color: #012336;
     overflow: hidden;
@@ -62,6 +61,10 @@ h3 {
     margin-top: 5px;
     text-align: center;
     color: #c6c6c6;
+}
+
+.bigs, .heatmap {
+    margin-bottom: 5px;
 }
 
 .button {
@@ -105,14 +108,44 @@ h3 {
     margin-right: 0;
 }
 
-.markPrice, .oi {
+.markPrice, .oi{
     color:#8b8b8b;
     font-size: 16px;
+    margin-bottom: 4px;
 }
 
-.markPrice span, .oi span {
+.markPrice span, .oi span, .tops-status {
     color: #f4e4d5;
     font-weight: bold;
+}
+
+.tops-status {
+    margin-top: 13px;
+    font-size: 15px;
+}
+
+.tops-status span {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.bullish {
+    color: rgb(6, 133, 6);
+}
+
+.bearish {
+    color: rgb(147, 3, 3);
+}
+
+.neutral {
+    color: rgb(178, 178, 178);
+}
+
+.box {
+    border: 1px solid rgb(150, 150, 150);
+    padding: 5px;
+    border-radius: 4px;
+    margin: 0px 2px 0 2px;
 }
 
 #temp {
@@ -129,6 +162,8 @@ h3 {
     cursor: pointer;
     font-size: 20px;
 }
+
+
 
 @media (max-width: 600px) {
     .main {

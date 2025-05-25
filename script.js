@@ -2,10 +2,12 @@ const container1 = document.getElementById('container1');
 const container2 = document.getElementById('container2');
 const markPrice = document.getElementById('markPrice');
 const oi = document.getElementById('oi');
+const topsStatus = document.getElementById('tops-status');
 const pause = document.getElementById('pause');
 const temp = document.getElementById('temp');
 const alarmSound = document.getElementById('alarmSound');
 const alarmEmoji = document.getElementById("alarmEmoji");
+
 
 let isPaused = false;
 let intervalId = null;
@@ -57,7 +59,6 @@ function connect() {
 
     socket.onmessage = (event) => {
         if (!isPaused) {
-            const now = Date.now();
             const data = JSON.parse(event.data);
 
             if (data.e === 'aggTrade') {
@@ -265,11 +266,41 @@ async function getDepth() {
 
 }
 
+async function LSRatio(){
+    const periods = ['5m', '4h', '1d'];
+    const result = [];
+    for(let item of periods){
+        const url = `https://fapi.binance.com/futures/data/topLongShortPositionRatio?symbol=btcusdt&period=${item}&limit=1`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const ratio = parseFloat(data[0]['longShortRatio']);
+        result.push([ratio, item]);
+    }
+
+    result.forEach((item) => {
+        const span = document.createElement('span');
+        span.classList.add('box');
+        if(item[0] > 1){
+            span.innerHTML = `${item[1]}: <span class="bullish">Bullish </span>`;
+        } else if(item[0] < 1) {
+            span.innerHTML = `${item[1]}: <span class="bearish">Bearish </span>`;
+        } else {
+            span.innerHTML = `${item[1]}: <span class="neutral">Neutral</span>`;
+        }
+
+        topsStatus.append(span);
+        while(topsStatus.children.length > 3){
+            topsStatus.removeChild(topsStatus.lastChild);
+        }
+    });
+}
+
 function startInterval(currentPrice){
     if(!intervalId) {
         intervalId = setInterval( () => {
             openInterest();
             getDepth(currentPrice);
+            LSRatio();
         }, 5000);
     }
 }
