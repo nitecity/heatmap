@@ -267,7 +267,7 @@ async function getDepth() {
 }
 
 async function LSRatio(){
-    const periods = ['5m', '4h', '1d'];
+    const periods = ['5m', '4h', '1D'];
     const result = [];
     for(let item of periods){
         const url = `https://fapi.binance.com/futures/data/topLongShortPositionRatio?symbol=btcusdt&period=${item}&limit=1`;
